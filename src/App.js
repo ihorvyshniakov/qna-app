@@ -12,8 +12,8 @@ function getQuestions(page, questionsQuantity) {
 		});
 }
 
-function getComments(questionId) {
-	return axios.get(`https://api.stackexchange.com/2.3/questions/${questionId}/comments?order=asc&sort=creation&site=stackoverflow&filter=!nKzQURB9EO`)
+function getAnswers(questionId) {
+	return axios.get(`https://api.stackexchange.com/2.3/questions/${questionId}/answers?order=desc&sort=activity&site=stackoverflow&filter=!nKzQURF6Y5`)
 		.then((response) => {
 			console.log(response.data)
 			var commentsList = response.data.items
@@ -28,7 +28,7 @@ function convertTimestampToDateString(timestamp) {
 
 const App = () => {
 	const [isModalOpen, setModalOpen] = useState(false)
-	const [actualComments, setActualComments] = useState([])
+	const [actualAnswers, setActualAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
 	console.log(questions)
 
@@ -36,8 +36,8 @@ const App = () => {
 		getQuestions(1, 20).then(questions => setQuestions(questions))
 	}, [])
 
-	const showQuestionComments = (questionId) => {
-		getComments(questionId).then(comments => setActualComments(comments))
+	const showQuestionAnswers = (questionId) => {
+		getAnswers(questionId).then(answers => setActualAnswers(answers))
 		setModalOpen(true)
 	}
 
@@ -49,17 +49,17 @@ const App = () => {
 						<div className="list">
 							<ul>
 								<div className="wrap">
-									{actualComments.map(comment => (
+									{actualAnswers.map(answer => (
 										<li>
-											{comment.body}
+											{answer.body}
 											<div className="details">
-												<p className="date">{convertTimestampToDateString(comment.creation_date)}</p>
-												<p className='author'>{comment.owner.display_name}</p>
+												<p className="date">{convertTimestampToDateString(answer.creation_date)}</p>
+												<p className='author'>{answer.owner.display_name}</p>
 											</div>
 										</li>
 										))}
 								</div>
-								{actualComments.length == 0 && (<p className='info'>There's no comments to this question.</p>)}
+								{actualAnswers.length == 0 && (<p className='info'>There's no answers to this question.</p>)}
 							</ul>
 							<p className="cross" onClick={()=>setModalOpen(false)}>X</p>
 						</div>
@@ -70,7 +70,7 @@ const App = () => {
 				{questions.map(question => (
 					<li
 						key={question.question_id}
-						onClick={() => showQuestionComments(question.question_id)}
+						onClick={() => showQuestionAnswers(question.question_id)}
 					>
 						{question.title}
 					</li>
