@@ -3,7 +3,6 @@ import axios from 'axios'
 import { AppBar, Button, Container, Dialog, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography, List, ListItem, ListItemText, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-import './App.css';
 import { Box } from '@mui/system';
 
 function getQuestions(page, questionsQuantity) {
@@ -49,8 +48,9 @@ const App = () => {
   };
 
 	const showQuestionAnswers = (questionId) => {
-		getAnswers(questionId).then(answers => setActualAnswers(answers))
-		setModalOpen(true)
+		getAnswers(questionId)
+			.then(answers => setActualAnswers(answers))
+			.then(() => setModalOpen(true))
 	}
 
 	useEffect(() => {
