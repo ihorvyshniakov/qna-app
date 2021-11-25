@@ -11,7 +11,11 @@ function getQuestions(page, questionsQuantity) {
 			console.log(response.data)
 			var questionsList = response.data.items
 			return questionsList
-		});
+		})
+		.catch(err => {
+			console.error(err)
+			return []
+		})
 }
 
 function getAnswers(questionId) {
@@ -20,7 +24,11 @@ function getAnswers(questionId) {
 			console.log(response.data)
 			var commentsList = response.data.items
 			return commentsList
-		});
+		})
+		.catch(err => {
+			console.error(err)
+			return []
+		})
 }
 
 function convertTimestampToDateString(timestamp) {
