@@ -1,0 +1,34 @@
+.App {
+	position: relative;
+
+	.loading {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+
+		background: rgba(0, 0, 0, 0.3);
+		backdrop-filter: blur(3px);
+		-webkit-backdrop-filter: blur(5px);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		svg {
+			fill: white;
+			animation: rotate linear 2s infinite;
+		}
+
+		@keyframes rotate {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	}
+}

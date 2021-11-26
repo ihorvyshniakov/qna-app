@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Container, Typography } from '@mui/material'
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { connect } from 'react-redux'
+
+import './App.css'
 
 import MyDialog from './components/MyDialog';
 import MyTable from './components/MyTable';
@@ -17,14 +20,13 @@ const App = ({
 	onAddAnswers
 }) => {
 	const [isModalOpen, setModalOpen] = useState(false)
+	const [isLoading, setLoading] = useState(false)
+
 	const [actualAnswers, setActualAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
 
 	const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-
-	// console.log(storeQuestionsList)
-	// console.log(questions)
 
 	const changePage = (event, newPage) => {
     setPage(newPage);
@@ -45,12 +47,16 @@ const App = ({
 			setModalOpen(true)
 		} else {
 			// write to store and show
+			setLoading(true)
 			getAnswers(questionId)
 				.then(answers => {
 					setActualAnswers(answers)
 					return answers
 				})
-				.then(answers => onAddAnswers(answers, questionId))
+				.then(answers => {
+					onAddAnswers(answers, questionId)
+					setLoading(false)
+				})
 				.then(() => setModalOpen(true))
 		}
 	}
@@ -66,23 +72,34 @@ const App = ({
 				setQuestions(filteredList)
 			} else {
 				onAddRowsQty(rowsPerPage)
+				setLoading(true)
 				getQuestions(page + 1, rowsPerPage).then(questions => {
 					setQuestions(questions)
 					onAddQuestions(questions, page)
+					setLoading(false)
 				})
 			}
 		} else {
 			onAddRowsQty(rowsPerPage)
 			onClearQuestions()
+			setLoading(true)
 			getQuestions(page + 1, rowsPerPage).then(questions => {
 				setQuestions(questions)
 				onAddQuestions(questions, page)
+				setLoading(false)
 			})
 		}
 	}, [page, rowsPerPage])
 
   return (
     <div className="App">
+			{
+				isLoading && (
+					<div className="loading">
+						<AutorenewIcon sx={{fontSize: 70}} />
+					</div>
+				)
+			}
 			<Header/>
 			<Container sx={{width: '100%', p: '40px 20px 80px'}}>
 				<Typography variant="h5" align='center' sx={{mb: '10px'}}>
