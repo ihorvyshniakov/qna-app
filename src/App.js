@@ -8,11 +8,13 @@ import Header from './components/Header';
 import { getQuestions, getAnswers } from './requests'
 
 const App = ({
-	storeQuestionsList,
 	storeRowsPerPage,
+	storeQuestionsList,
+	storeAnswersList,
 	onAddQuestions,
 	onClearQuestions,
-	onAddRowsQty
+	onAddRowsQty,
+	onAddAnswers
 }) => {
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [actualAnswers, setActualAnswers] = useState([])
@@ -21,7 +23,7 @@ const App = ({
 	const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
-	console.log(storeQuestionsList)
+	// console.log(storeQuestionsList)
 	// console.log(questions)
 
 	const changePage = (event, newPage) => {
@@ -34,19 +36,33 @@ const App = ({
   };
 
 	const showQuestionAnswers = (questionId) => {
-		getAnswers(questionId)
-			.then(answers => setActualAnswers(answers))
-			.then(() => setModalOpen(true))
+		let isQuestionInStore = storeAnswersList.some(item=>item.question_id == questionId)
+
+		if (isQuestionInStore){
+			// show from store
+			let neededAnswersFromStore = storeAnswersList.filter(item=>item.question_id == questionId)[0].answersList
+			setActualAnswers(neededAnswersFromStore)
+			setModalOpen(true)
+		} else {
+			// write to store and show
+			getAnswers(questionId)
+				.then(answers => {
+					setActualAnswers(answers)
+					return answers
+				})
+				.then(answers => onAddAnswers(answers, questionId))
+				.then(() => setModalOpen(true))
+		}
 	}
 
 	useEffect(() => {
 		let isRowsPerPageSame = storeRowsPerPage == rowsPerPage
 
 		if (isRowsPerPageSame){
-			let isNotEmptyAndHaveNeededPage = storeQuestionsList.length > 0 && storeQuestionsList.some(item=>item.pageNum==page)
+			let isNeededPageInStore = storeQuestionsList.some(item=>item.pageNum == page)
 
-			if (isNotEmptyAndHaveNeededPage){
-				let filteredList = storeQuestionsList.filter(item=>item.pageNum==page)[0].questionsList
+			if (isNeededPageInStore){
+				let filteredList = storeQuestionsList.filter(item=>item.pageNum == page)[0].questionsList
 				setQuestions(filteredList)
 			} else {
 				onAddRowsQty(rowsPerPage)
@@ -92,8 +108,9 @@ const App = ({
 
 export default connect(
 	state => ({
+		storeRowsPerPage: state.rowsPerPage,
 		storeQuestionsList: state.questions,
-		storeRowsPerPage: state.rowsPerPage
+		storeAnswersList: state.answers
 	}),
 	dispatch => ({
 		onAddQuestions: (questionsList, pageNum) => {
@@ -108,6 +125,13 @@ export default connect(
 		},
 		onClearQuestions: () => {
 			dispatch({ type: 'CLEAR_QUESTIONS' })
+		},
+		onAddAnswers: (answersList, question_id) => {
+			const payload = {
+				question_id,
+				answersList
+			}
+			dispatch({ type: 'ADD_ANSWER', payload: payload })
 		},
 	})
 )(App);
