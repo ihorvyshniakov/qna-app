@@ -7,7 +7,13 @@ import MyTable from './components/MyTable';
 import Header from './components/Header';
 import { getQuestions, getAnswers } from './requests'
 
-const App = ({ store, onAddQuestions }) => {
+const App = ({
+	storeQuestionsList,
+	storeRowsPerPage,
+	onAddQuestions,
+	onClearQuestions,
+	onAddRowsQty
+}) => {
 	const [isModalOpen, setModalOpen] = useState(false)
 	const [actualAnswers, setActualAnswers] = useState([])
 	const [questions, setQuestions] = useState([])
@@ -15,8 +21,8 @@ const App = ({ store, onAddQuestions }) => {
 	const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
-	// console.log(store)
-	console.log(questions)
+	console.log(storeQuestionsList)
+	// console.log(questions)
 
 	const changePage = (event, newPage) => {
     setPage(newPage);
@@ -34,10 +40,29 @@ const App = ({ store, onAddQuestions }) => {
 	}
 
 	useEffect(() => {
-		getQuestions(page + 1, rowsPerPage).then(questions => {
-			setQuestions(questions)
-			onAddQuestions(questions)
-		})
+		let isRowsPerPageSame = storeRowsPerPage == rowsPerPage
+
+		if (isRowsPerPageSame){
+			let isNotEmptyAndHaveNeededPage = storeQuestionsList.length > 0 && storeQuestionsList.some(item=>item.pageNum==page)
+
+			if (isNotEmptyAndHaveNeededPage){
+				let filteredList = storeQuestionsList.filter(item=>item.pageNum==page)[0].questionsList
+				setQuestions(filteredList)
+			} else {
+				onAddRowsQty(rowsPerPage)
+				getQuestions(page + 1, rowsPerPage).then(questions => {
+					setQuestions(questions)
+					onAddQuestions(questions, page)
+				})
+			}
+		} else {
+			onAddRowsQty(rowsPerPage)
+			onClearQuestions()
+			getQuestions(page + 1, rowsPerPage).then(questions => {
+				setQuestions(questions)
+				onAddQuestions(questions, page)
+			})
+		}
 	}, [page, rowsPerPage])
 
   return (
@@ -67,11 +92,22 @@ const App = ({ store, onAddQuestions }) => {
 
 export default connect(
 	state => ({
-		store: state
+		storeQuestionsList: state.questions,
+		storeRowsPerPage: state.rowsPerPage
 	}),
 	dispatch => ({
-		onAddQuestions: (questionsList) => {
-			dispatch({ type: 'ADD_QUESTIONS', payload: questionsList })
-		}
+		onAddQuestions: (questionsList, pageNum) => {
+			const payload = {
+				pageNum: pageNum,
+				questionsList: questionsList
+			}
+			dispatch({ type: 'ADD_QUESTIONS', payload: payload })
+		},
+		onAddRowsQty: (rowsPerPage) => {
+			dispatch({ type: 'ADD_ROWS_QUANTITY', payload: rowsPerPage })
+		},
+		onClearQuestions: () => {
+			dispatch({ type: 'CLEAR_QUESTIONS' })
+		},
 	})
 )(App);

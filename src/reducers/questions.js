@@ -1,9 +1,16 @@
 export default function questions(state = [], action) {
-	if (action.type === 'ADD_QUESTIONS'){
-		return [
-			...state,
-			action.payload
-		]
+	switch (action.type) {
+		case 'ADD_QUESTIONS':
+			return [
+				...state,
+				{
+					pageNum: action.payload.pageNum,
+					questionsList: action.payload.questionsList
+				}
+			]
+		case 'CLEAR_QUESTIONS':
+			return []
+		default:
+			return state
 	}
-	return state
 }
