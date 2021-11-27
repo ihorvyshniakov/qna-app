@@ -34,7 +34,7 @@ const App = ({
 
   const changeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(page);
+    setPage(0);
   };
 
 	const showQuestionAnswers = (questionId) => {
