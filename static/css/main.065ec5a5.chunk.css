@@ -1,0 +1,2 @@
+*{margin:0;padding:0}.App{position:relative}.App .loading{position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(0,0,0,.3);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(5px);display:flex;justify-content:center;align-items:center}.App .loading svg{fill:#fff;animation:rotate 2s linear infinite}@keyframes rotate{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
+/*# sourceMappingURL=main.065ec5a5.chunk.css.map */

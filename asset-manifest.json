@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/qna-app/static/css/main.065ec5a5.chunk.css",
+    "main.js": "/qna-app/static/js/main.46ae4c7f.chunk.js",
+    "main.js.map": "/qna-app/static/js/main.46ae4c7f.chunk.js.map",
+    "runtime-main.js": "/qna-app/static/js/runtime-main.61266101.js",
+    "runtime-main.js.map": "/qna-app/static/js/runtime-main.61266101.js.map",
+    "static/js/2.d53eb133.chunk.js": "/qna-app/static/js/2.d53eb133.chunk.js",
+    "static/js/2.d53eb133.chunk.js.map": "/qna-app/static/js/2.d53eb133.chunk.js.map",
+    "static/js/3.22e1fcb2.chunk.js": "/qna-app/static/js/3.22e1fcb2.chunk.js",
+    "static/js/3.22e1fcb2.chunk.js.map": "/qna-app/static/js/3.22e1fcb2.chunk.js.map",
+    "index.html": "/qna-app/index.html",
+    "static/css/main.065ec5a5.chunk.css.map": "/qna-app/static/css/main.065ec5a5.chunk.css.map",
+    "static/js/2.d53eb133.chunk.js.LICENSE.txt": "/qna-app/static/js/2.d53eb133.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.61266101.js",
+    "static/js/2.d53eb133.chunk.js",
+    "static/css/main.065ec5a5.chunk.css",
+    "static/js/main.46ae4c7f.chunk.js"
+  ]
+}
