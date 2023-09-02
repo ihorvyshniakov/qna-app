@@ -1,4 +1,4 @@
-# [Stack overflow QnA app](http://my-portfolio.cf/qna-app)
+# [Stack overflow QnA app](https://ihorvyshniakov.github.io/qna-app/)
 
 © 2022 Developed by Vyshniakov Ihor.
 
